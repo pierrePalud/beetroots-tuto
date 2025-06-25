@@ -6,14 +6,9 @@
 git clone https://github.com/pierrePalud/beetroots-tuto.git
 cd beetroots-tuto
 docker build -t beetroots-tuto .
-docker run -v $(pwd):/app -w /app -it pierrepalud/beetroots-tuto
 ```
 
-and then, in container:
-
-```shell
-poetry install
-```
+Then open vscode, click on vscode bottom left corner, and select "Reopen in container"
 
 ## Step 1 : nnbma
 
