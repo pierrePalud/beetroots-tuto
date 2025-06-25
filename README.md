@@ -1,6 +1,19 @@
 # beetroots-tuto
 
-## step 2
+## Step 0 : install
+
+```shell
+git clone https://github.com/pierrePalud/beetroots-tuto.git
+cd beetroots-tuto
+docker build -t beetroots-tuto .
+docker run -v $(pwd):/app -w /app -it pierrepalud/beetroots-tuto
+```
+
+## Step 1 : nnbma
+
+play with the notebooks/01 notebook.
+
+## step 2 : beetroots
 
 ```shell
 poetry shell
