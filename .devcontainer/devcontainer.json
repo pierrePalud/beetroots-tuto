@@ -1,7 +1,7 @@
 {
   "name": "Beetroots Tuto",
   "build": {
-    "dockerfile": "../Dockerfile"
+    "dockerfile": "Dockerfile"
   },
   "workspaceFolder": "/app",
   "settings": {
@@ -10,5 +10,6 @@
   "extensions": [
     "ms-python.python",
     "ms-toolsai.jupyter"
-  ]
+  ],
+  "postCreateCommand": "poetry install"
 }
