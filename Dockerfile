@@ -7,7 +7,6 @@ WORKDIR /app
 
 # Install poetry and the package
 RUN curl -sSL https://install.python-poetry.org | python3 -
-RUN poetry install
 
 # Default command
 CMD ["bash"]

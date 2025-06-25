@@ -9,6 +9,12 @@ docker build -t beetroots-tuto .
 docker run -v $(pwd):/app -w /app -it pierrepalud/beetroots-tuto
 ```
 
+and then, in container:
+
+```shell
+poetry install
+```
+
 ## Step 1 : nnbma
 
 play with the notebooks/01 notebook.
