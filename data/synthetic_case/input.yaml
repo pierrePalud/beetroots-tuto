@@ -1,0 +1,110 @@
+simu_init:
+  simu_name: "test"
+  cloud_name: "synthetic_case"
+  max_workers: 10
+  #
+  params_names:
+    kappa: $\kappa$
+    x1: $x_1$
+    x2: $x_2$
+    x3: $x_3$
+  #
+  list_lines_fit:
+    - "co_v0_j1__v0_j0"
+    - "co_v0_j2__v0_j1"
+    - "co_v0_j3__v0_j2"
+#
+to_run_optim_map: true
+to_run_mcmc: true
+#
+filename_int: "observations.pkl"
+filename_err: "sigma.pkl"
+#
+forward_model:
+  forward_model_name: "model"
+  force_use_cpu: false
+  fixed_params: # must contain all the params in list_names of the SImulation object. Values are in linear scale.
+    kappa: null
+    x1: null
+    x2: null
+    x3: null
+  is_log_scale_params: # defines the scale to work with for each param (either log or lin)
+    kappa: True
+    x1: True
+    x2: True
+    x3: True
+
+sigma_m_float_linscale: 1.001
+
+# prior indicator
+prior_indicator:
+  indicator_margin_scale: 1.0e-1
+  lower_bounds_lin:
+    - 5.0e-1 # kappa
+    - 1.0 # x1
+    - 1.0 # x2
+    - 1.0 # x3
+  upper_bounds_lin:
+    - 2.0 # kappa
+    - 3.0 # x1
+    - 3.0 # x2
+    - 3.0 # x3
+list_gaussian_approx_params: []
+mixing_model_params_filename: ["params_for_gaussian_only.csv"]
+
+# spatial prior
+with_spatial_prior: true
+spatial_prior:
+  name: "L2-laplacian"
+  use_next_nearest_neighbors: false
+  initial_regu_weights: [0.1, 0.1, 0.1, 0.1]
+
+# sampling params
+sampling_params:
+  map:
+    initial_step_size:  1.0e-1
+    extreme_grad: 1.0e-5
+    history_weight: 0.95
+    selection_probas: [0.2, 0.8] # (p_mtm, p_pmala)
+    k_mtm: 25
+    is_stochastic: false
+    compute_correction_term: false
+  mcmc:
+    initial_step_size:  1.0e-1
+    extreme_grad: 1.0e-5
+    history_weight: 0.95
+    selection_probas: [0.2, 0.8] # (p_mtm, p_pmala)
+    k_mtm: 25
+    is_stochastic: true
+    compute_correction_term: false
+
+
+# run params
+run_params:
+  map:
+    N_MCMC: 1
+    T_MC: 2000 #2000
+    T_BI: 200 # 100
+    batch_size: 20
+    freq_save: 1
+    start_from: null
+  mcmc:
+    N_MCMC: 1
+    T_MC: 2000
+    T_BI: 100
+    plot_1D_chains: false
+    plot_2D_chains: false
+    plot_ESS: false
+    plot_comparisons_yspace: false
+    batch_size: 15
+    freq_save: 1
+    start_from: null
+    regu_spatial_N0: 100 # !!float inf # sets to infinite
+    regu_spatial_scale: 10.0
+    regu_spatial_vmin: 1.0e-2
+    regu_spatial_vmax: 1.0e+2
+    list_CI: [68, 90, 95, 99]
+
+pixels_of_interest:
+  64: "#1 test 64"
+  32: "#2 test 32"

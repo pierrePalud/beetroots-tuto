@@ -1,0 +1,33 @@
+[build-system]
+# poetry build
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.poetry] # https://python-poetry.org/docs/pyproject/
+name = "beetroots-tuto"
+version = "0.0.1"
+description = "Beetroots tutorial"
+license = "MIT"
+authors = ["Pierre Palud"]
+readme = "README.md"
+repository = "https://github.com/pierrePalud/beetroots-tuto"
+
+
+
+[tool.poetry.dependencies] # https://python-poetry.org/docs/cli/#add
+python = ">=3.9,<3.12"
+torch = "==2.2.1" # the versions past 2.2.1 do not work with poetry
+nnbma = ">=0.1.2"
+
+jupyter = ">=1.0.0"
+notebook = ">=7.0.7"
+jupyter-lsp = ">=2.2.2"
+beetroots = "^1.1.0"
+
+
+
+
+[tool.poetry.urls]
+Documentation = "https://beetroots.readthedocs.io/en/latest/"
+"Bug Tracker" = "https://github.com/pierrePalud/beetroots/issues"
