@@ -13,8 +13,9 @@ In a nutshell, the pipeline consists of two steps:
 Then, there is a 3rd step for the user: the results analysis!
 
 To learn more about nnbma and beetroots, check the associated papers, published in Astronomy & Astrophysics:
-* nnbma: https://www.aanda.org/articles/aa/abs/2023/10/aa47074-23/aa47074-23.html
-* beetroots: https://www.aanda.org/articles/aa/abs/2025/06/aa54266-25/aa54266-25.html
+
+* nnbma: <https://www.aanda.org/articles/aa/abs/2023/10/aa47074-23/aa47074-23.html>
+* beetroots: <https://www.aanda.org/articles/aa/abs/2025/06/aa54266-25/aa54266-25.html>
 
 ## Step 0: install
 
@@ -86,10 +87,8 @@ Now what remains is to analyze the results.
 But fear not: `beetroots` automatically performs an exhaustive results analysis.
 Let's now explore the output of this analysis.
 
-
 ---
 ---
-
 
 ## Analyzing the results of an inference run
 
@@ -98,41 +97,44 @@ Whether in optimization (`optim_map`) or sampling (`mcmc`) mode, `beetroots` alw
 ![output-structure](./img/output-structure.png)
 
 The name of each output folder is generated from
+
 * the simulation name (defined in the `input.yaml` file, in the `simu_name` entry). Here it is set to "test".
 * the date and hour (here the 1st of July of 2025, at 8AM).
 
 Each output folder contains 3 subfolders:
+
 * `data`: it contains tabular data (typically csv files). It contains 2 subfolders:
   * input: input data to the inference, for traceability
   * output: contains some of the values used to plot the figures in "img"
 
 * `raw`: it contains the raw data, available in case the beetroots's automatic results extraction does not run a test you want, or in case you want to re-do one of the figures.
 
-* `img`: the main output folder, that should be analyzed when the inference run is finished. In this folder, mainly 4 subfolders are interesting for standard users:
+* `img`: the main output folder, that should be analyzed when the inference run is finished. In this folder, mainly 6 subfolders are interesting for standard users:
   * `observations`: shows the observations actually used for inversion. Usefull to check whether beetroots analyzes the data you think it is analyzing.
   * `objective`: shows how the negative log posterior evolves with the number of iterations. Essential to assess convergence for both optimization and MCMC.
   * `accept_freq`: shows the evolution of the frequency at which a candidate is accepted for both PMALA (local exploration) and MTM (global exploration).
   * `estimators`: shows the reconstructions and uncertainty quantifications (for MCMC)
+  * `mc`: shows 1D and 2D histograms of the samples (for MCMC)
   * `p-values`: results of the model checking / posterior predictive checking test, that assesses how well the reconstructions can reproduce the observations.
-
 
 **Now, what to do from these outputs? What actions to take?**
 
-First, check the `estimators` (ie, the reconstructions).
+First, check the reconstructed maps in `estimators` (ie, the reconstructions) and the sample histograms (1D and 2D) in `mc`.
 Second, whether the reconstructions make sense to you or not, perform a few sanity checks:
+
 * check convergence (`objective`)
 * check the efficiency of the local and global explorations (`accept_freq`)
 * check whether your reconstructions reproduces your observations (`p-values`)
-
 
 ### Case 1: in optimization mode
 
 The inference process runs an optimization when the `to_run_optim_map` entry in the `input.yaml` file set to `true`.
 If you do not want to run an optimization process, set this parameter to `false`.
 
-#### check convergence
+#### 1.1 check convergence
 
 in `objective`: look at the two files
+
 * `optim_map_objective_with_bi.PNG`
 * `optim_map_objective_no_bi.PNG`
 
@@ -152,23 +154,25 @@ When the Burn-In is removed, the convergence is easier to assess:
 In this case, it seams that the convergence has not been reached.
 
 To improve convergence, there are two options:
+
 * increase the total number of iterations (set in the `input.yaml` file, in the `run_params/map/T_MC` entry).
 * improve the local and global explorations.
 
 This second approach requires diagnosing the efficiency of the two exploration approaches.
 
-#### check the efficiency of local and global exploration
+#### 1.2 check the efficiency of local and global exploration
 
 in `accepted_freq/optim_map`: look at the two files
+
 * `freq_accept_seed0_MTM.PNG` for global exploration
 * `freq_accept_seed0_PMALA.PNG` for local exploration
-
 
 In optimization mode, candidates are only accepted if they lead to a decrease of the objective.
 If convergence is reached, then candidates are no longer accepted.
 Therefore, **the accept frequency should go to zero for both exploration approaches**.
 
 However, they should go to zero at similar speed.
+
 * if the local exploration goes to 0 much earlier than global exploration, then its step size should be decreased (in the `input.yaml` file, entry `sampling_params/map/initial_step_size`)
 * if the global exploration goes to 0 much earlier than local exploration, then the number of candidates generated at each global exploration step should be increased (in the `input.yaml` file, entry `sampling_params/map/k_mtm`)
 
@@ -176,9 +180,10 @@ However, they should go to zero at similar speed.
 
 The inference process runs sampling when the `to_run_mcmc` entry in the `input.yaml` file set to `true`. If you do not want to run an MCMC process, set this parameter to `false`.
 
-#### check convergence
+#### 2.1 check convergence
 
 in `objective`: look at the two files
+
 * `mcmc_objective_with_bi.PNG`
 * `mcmc_objective_no_bi.PNG`
 
@@ -188,7 +193,7 @@ The Burn-In phase size (`run_params/mcmc/T_BI`) should be set so that any decrea
 
 Then, the larger the total number of iterations (`run_params/mcmc/T_MC`), the better the reconstructions and the uncertainty quantifications.
 
-#### check the efficiency of local and global exploration
+#### 2.2 check the efficiency of local and global exploration
 
 in `accepted_freq/mcmc`: look at the two files
 
@@ -196,7 +201,7 @@ in `accepted_freq/mcmc`: look at the two files
 
 * `freq_accept_seed0_MTM.PNG` for global exploration. Here, the higher the better, but the accept frequency should be at least 5%. If you are below (you reject too much), increase the number of generated candidates (in the `input.yaml` file, entry `sampling_params/mcmc/k_mtm`)
 
-#### model check: Posterior predictive check
+#### 2.3 model check: Posterior predictive check
 
 in `p-values/mcmc`: look at the `decision_pval_estim_optim_map_seed0.PNG` file.
 
