@@ -116,6 +116,7 @@ Each output folder contains 3 subfolders:
   * `estimators`: shows the reconstructions and uncertainty quantifications (for MCMC)
   * `mc`: shows 1D and 2D histograms of the samples (for MCMC)
   * `p-values`: results of the model checking / posterior predictive checking test, that assesses how well the reconstructions can reproduce the observations.
+  * `regularization_weights`: shows the evolution of the spatial regularization weight (only valid for MCMC in some conditions, see comment 2.4 below)
 
 **Now, what to do from these outputs? What actions to take?**
 
@@ -209,3 +210,14 @@ This file shows the pixels that are well reproduced and those that are not.
 
 If most pixels are not well reproduced, you might underestimate the uncertainties on your observations or on your model.
 For more information on this topic, check the [beetroots A&A paper](https://www.aanda.org/articles/aa/abs/2025/06/aa54266-25/aa54266-25.html).
+
+#### 2.4 check convergence of spatial regularization weight (if used)
+
+In the `input.yaml` file,
+
+* if `with_spatial_prior` is set to `true` (if you use spatial regularization),
+* and if the entry `run_params/mcmc/regu_spatial_N0` is set to a number that is lower than the MCMC total number of iterations `run_params/mcmc/T_MC`,
+
+then your MCMC process will automatically adjust the weights of the spatial regularization after `regu_spatial_N0` iterations.
+
+The evolution of the regularization weight should be visible in the output folder `regularization_weights`, in the file `mc_regu_weights.PNG`.
